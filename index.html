@@ -84,6 +84,27 @@ h2{font-size:28px;font-weight:700;letter-spacing:-.01em}
 
 footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:14px;padding-top:24px;border-top:1px solid var(--line)}
 
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:32px;align-items:start}
+.contact-aside{display:flex;flex-direction:column;gap:14px}
+.mail{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mail code{font:500 15px/1 var(--mono);padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);user-select:all}
+.copy{font:500 13px/1 var(--body);padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.copy:hover{border-color:var(--accent)}
+form.contact{display:flex;flex-direction:column;gap:14px;padding:22px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font:500 13px/1 var(--body);color:var(--muted)}
+.field input,.field textarea{font:400 15px/1.5 var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;box-sizing:border-box}
+.field textarea{min-height:130px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.hp{position:absolute;left:-9999px}
+form.contact button{align-self:flex-start;font:500 14px/1 var(--body);padding:12px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--bg);cursor:pointer}
+form.contact button:disabled{opacity:.6;cursor:wait}
+.status{font-size:14px;min-height:1.4em;color:var(--muted)}
+.status.ok{color:var(--accent)}
+.status.err{color:#c2410c}
+@media (max-width:640px){.contact-grid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:640px){
   .wrap{padding-block:48px 40px;gap:56px}
   .principles,.stack-grid,.projects{grid-template-columns:minmax(0,1fr)}
@@ -187,11 +208,59 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:
     </div>
   </section>
 
+  <section id="contact" aria-labelledby="h-contact">
+    <div class="sec-head"><span class="label">Contact</span><h2 id="h-contact">Let's talk</h2></div>
+    <div class="contact-grid">
+      <div class="contact-aside">
+        <p>Questions about leadership, engineering teams or a project you have in mind? Send me a message and I'll reply by email. Spanish or English is fine.</p>
+        <div class="mail"><code id="mail">hola@gazorpian.uy</code><button class="copy" type="button" id="copy-mail">Copy</button></div>
+      </div>
+      <form class="contact" id="contact-form" novalidate>
+        <input type="hidden" name="access_key" value="WEB3FORMS_ACCESS_KEY">
+        <input type="hidden" name="subject" value="New message from gazorpian.uy">
+        <input type="hidden" name="from_name" value="gazorpian.uy portfolio">
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field"><label for="cf-name">Name</label><input id="cf-name" name="name" required autocomplete="name"></div>
+        <div class="field"><label for="cf-email">Email</label><input id="cf-email" name="email" type="email" required autocomplete="email"></div>
+        <div class="field"><label for="cf-msg">Message</label><textarea id="cf-msg" name="message" required></textarea></div>
+        <button type="submit" id="cf-send">Send message</button>
+        <p class="status" id="cf-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
   <footer>
     <span>Gabriel Baña · Montevideo</span>
     <span>Español · English</span>
   </footer>
 </div>
+
+<script>
+(function(){
+  var copyBtn=document.getElementById('copy-mail');
+  copyBtn.addEventListener('click',function(){
+    var t=document.getElementById('mail').textContent;
+    var done=function(){copyBtn.textContent='Copied';setTimeout(function(){copyBtn.textContent='Copy'},1500)};
+    try{navigator.clipboard.writeText(t).then(done,function(){selectMail()})}catch(e){selectMail()}
+  });
+  function selectMail(){var r=document.createRange();r.selectNodeContents(document.getElementById('mail'));var s=window.getSelection();s.removeAllRanges();s.addRange(r)}
+  var form=document.getElementById('contact-form'),btn=document.getElementById('cf-send'),st=document.getElementById('cf-status');
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    st.className='status';
+    if(!form.checkValidity()){st.className='status err';st.textContent='Fill in your name, a valid email and a message.';return}
+    if(form.access_key.value.indexOf('WEB3FORMS')===0){st.className='status err';st.textContent='The form isn\u2019t connected yet. Email hola@gazorpian.uy instead.';return}
+    btn.disabled=true;btn.textContent='Sending\u2026';
+    try{
+      var res=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(form)))});
+      var json=await res.json();
+      if(res.status===200){form.reset();st.className='status ok';st.textContent='Message sent. I\u2019ll get back to you soon.'}
+      else{st.className='status err';st.textContent=(json&&json.message)||'Couldn\u2019t send the message. Try again or email me directly.'}
+    }catch(err){st.className='status err';st.textContent='Couldn\u2019t reach the form service. Check your connection or email me directly.'}
+    btn.disabled=false;btn.textContent='Send message';
+  });
+})();
+</script>
 
 </body>
 </html>
