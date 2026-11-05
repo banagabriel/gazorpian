@@ -78,6 +78,27 @@ section{display:flex;flex-direction:column;gap:28px}
 h2{font-size:clamp(28px,4.4vw,36px);font-weight:700;letter-spacing:-.02em}
 .sec-head{display:flex;flex-direction:column;gap:8px}
 
+/* Work */
+.work{display:flex;flex-direction:column;gap:28px}
+.work-item{display:grid;grid-template-columns:200px minmax(0,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.work-visual{display:block;min-height:100%;background:#ebd3a0}
+.work-art{display:block;width:100%;height:100%}
+.work-art .ring{fill:none;stroke:#1c7f9c;stroke-width:2.5;opacity:0;transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion:no-preference){
+  .work-art .ring{animation:ping 2.4s cubic-bezier(.16,1,.3,1) infinite}
+  .work-art .r2{animation-delay:1.2s}
+}
+@media (prefers-reduced-motion:reduce){.work-art .r1{opacity:.5;transform:scale(1.6)}}
+@keyframes ping{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(2.6)}}
+.work-body{display:flex;flex-direction:column;gap:6px;padding:18px 20px}
+.work-title{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.work-title h3{font-size:21px;font-weight:700;letter-spacing:-.015em}
+.badge{font:500 12px/1 var(--body);color:var(--accent);background:var(--accent-soft);padding:6px 9px;border-radius:999px}
+.work-tag{font:500 16px/1.4 var(--display);color:var(--ink)}
+.work-body > p:not(.work-tag){color:var(--muted);font-size:15px;line-height:1.55;max-width:62ch}
+.work-foot{display:flex;align-items:center;justify-content:space-between;gap:10px 20px;flex-wrap:wrap;margin-top:6px}
+.work-meta{color:var(--muted);font-size:14px}
+
 /* Principles */
 .how{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,48px);align-items:start}
 .how-body{display:flex;flex-direction:column;gap:28px}
@@ -164,6 +185,10 @@ form.contact button:disabled{opacity:.6;cursor:wait}
 @media (max-width:640px){
   .wrap{padding-block:48px 40px;gap:56px}
   .stack-grid,.projects{grid-template-columns:minmax(0,1fr)}
+  .work-item{grid-template-columns:minmax(0,1fr)}
+  .work-visual{min-height:0;aspect-ratio:8/3}
+  .work-body{padding:16px 18px}
+  .work-foot .btn{flex:1 1 100%;justify-content:center}
   .how{grid-template-columns:minmax(0,1fr);gap:24px}
   .how-body{display:contents}
   .how h2{order:1}
@@ -191,6 +216,30 @@ form.contact button:disabled{opacity:.6;cursor:wait}
       <a class="btn" href="https://www.linkedin.com/in/banagabriel" target="_blank" rel="noopener">LinkedIn<svg class="ext" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2.5h5.5V8M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only"> (opens in a new tab)</span></a>
     </div>
   </header>
+
+  <section class="work" aria-labelledby="h-work">
+    <h2 id="h-work">What I'm building</h2>
+    <article class="work-item">
+      <a class="work-visual" href="https://beachcomber.gazorpian.uy" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+        <svg class="work-art" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+          <defs><linearGradient id="bc-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c7f9c"/><stop offset="1" stop-color="#43b8d0"/></linearGradient></defs>
+          <rect width="800" height="300" fill="#ebd3a0"/>
+          <path d="M0 0H800V112C740 124 690 102 620 110S500 132 430 118 300 98 230 112 90 128 0 112Z" fill="url(#bc-sea)"/>
+          <path d="M0 112C90 128 160 98 230 112S360 132 430 118 550 102 620 110 740 124 800 112V122C740 134 690 112 620 120S500 142 430 128 300 108 230 122 90 138 0 122Z" fill="#f7f1e3"/>
+          <g fill="#c9a96a" opacity=".55"><circle cx="90" cy="200" r="3"/><circle cx="170" cy="250" r="2"/><circle cx="330" cy="185" r="2.5"/><circle cx="610" cy="245" r="2"/><circle cx="710" cy="190" r="3"/><circle cx="470" cy="270" r="2"/></g>
+          <g transform="translate(305 222)"><circle r="11" fill="#d9a531" stroke="#8a6414" stroke-width="2.5"/><circle r="5" fill="none" stroke="#8a6414" stroke-width="2"/></g>
+          <g transform="translate(505 232)"><circle r="10" fill="none" stroke="#6b6f76" stroke-width="3"/><circle cy="-11" r="3.5" fill="#d9d2c4" stroke="#6b6f76" stroke-width="2"/></g>
+          <g class="ping" transform="translate(420 208)"><circle class="ring r1" r="18"/><circle class="ring r2" r="18"/><circle r="6" fill="#1c7f9c"/></g>
+        </svg>
+      </a>
+      <div class="work-body">
+        <div class="work-title"><h3>Beachcomber</h3><span class="badge">Work in progress</span></div>
+        <p class="work-tag">Follow the beeps. Dig up treasure. Build a beach-combing empire.</p>
+        <p>An incremental browser game. You sweep a metal detector over the sand, follow the beeps and dig up what's buried.</p>
+        <div class="work-foot"><span class="work-meta">Browser game · Solo project</span><a class="btn primary" href="https://beachcomber.gazorpian.uy" target="_blank" rel="noopener">Play Beachcomber<svg class="ext" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M4 2.5h5.5V8M9.5 2.5 2.5 9.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sr-only"> (opens in a new tab)</span></a></div>
+      </div>
+    </article>
+  </section>
 
   <section class="how" aria-labelledby="h-how">
     <figure class="ronin"><img src="image.jpg" alt="Gabriel's illustrated avatar: a masked swordsman in a cobalt robe, crouching with a sword on his back" width="600" height="600" loading="lazy"></figure>
